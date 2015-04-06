@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cow4_sdk">
+
+	<property environment="env"/>
+
+    <target name="compile-ia-demo">
+
+        <exec executable="node" dir="${basedir}" failonerror="true">
+            <arg line="node_modules/haxe/bin/haxe-cli.js"/>
+            <arg line="-cp src -js ${basedir}/../../bin/js/IADemoApp.js -main com.tamina.cow4.IADemoApp"/>
+            <arg line="-use nodejs"/>
+            <arg line="-lib msignal"/>
+            <arg line="-lib mconsole-npm"/>
+            <arg line="-lib taminahx"/>
+        </exec>
+
+    </target>
+
+</project>
