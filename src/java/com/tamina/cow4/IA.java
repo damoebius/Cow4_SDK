@@ -4,9 +4,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import tamina.cow4.message.AuthenticateAbstractMessage;
 import tamina.cow4.message.AuthenticateResponse;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class IA {
@@ -14,16 +14,16 @@ public class IA {
     private static final String       EOF    = "#end#";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private DataInputStream  inStream;
-    private DataOutputStream outStream;
+    private InputStream  inStream;
+    private OutputStream outStream;
     private Socket server;
     private long   connectId;
 
     public IA(String address, int port) {
         try {
             this.server     = new Socket(address, port);
-            this.inStream   = new DataInputStream(server.getInputStream());
-            this.outStream  = new DataOutputStream(server.getOutputStream());
+            this.inStream   = server.getInputStream();
+            this.outStream  = server.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
