@@ -7,13 +7,13 @@ import java.util.List;
 public class TurnResult extends Message {
 
     private IAInfo ia;
-    private List<TurnAction> actions;
+    private List<GetTurnOrder> actions;
 
     public TurnResult() {
         this.setType("turnResult");
     }
 
-    public TurnResult(IAInfo ia, List<TurnAction> actions) {
+    public TurnResult(IAInfo ia, List<GetTurnOrder> actions) {
         this.setType("turnResult");
         this.ia = ia;
         this.actions = actions;
@@ -27,11 +27,11 @@ public class TurnResult extends Message {
         this.ia = ia;
     }
 
-    public List<TurnAction> getActions() {
+    public List<GetTurnOrder> getActions() {
         return actions;
     }
 
-    public void setActions(List<TurnAction> actions) {
+    public void setActions(List<GetTurnOrder> actions) {
         this.actions = actions;
     }
 }
