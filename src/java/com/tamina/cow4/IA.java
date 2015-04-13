@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class IA {
 
@@ -56,20 +57,20 @@ public class IA {
         return this;
     }
 
-    public void handleMessage(){
+    public IA handleMessage(ProcessTurn func){
         new Thread(() -> {
                 while(true) {
                     try {
                         TurnAction turnAction = MAPPER.readValue(server.getInputStream(), TurnAction.class);
-                        System.out.println(turnAction);
-                        TurnResult result = new TurnResult();
-                        result.setIa(iaInfo);
-                        result.setActions(Lists.newArrayList());
+                        List<TurnAction> turnActions = func.processTurn(turnAction.getData());
+                        TurnResult result = new TurnResult(iaInfo, turnActions);
+                        outStream.write((MAPPER.writeValueAsString(result) + EOF).getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }).run();
+        return this;
     }
 
     public void close() {
