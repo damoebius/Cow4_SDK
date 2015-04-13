@@ -1,10 +1,15 @@
 package tamina.cow4;
 
+import com.google.common.collect.Lists;
+import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tamina.cow4.message.AuthenticateAbstractMessage;
 import tamina.cow4.message.AuthenticateResponse;
+import tamina.cow4.message.TurnAction;
+import tamina.cow4.message.TurnResult;
+import tamina.cow4.model.IAInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +26,8 @@ public class IA {
     private InputStream  inStream;
     private OutputStream outStream;
     private Socket server;
-    private long   connectId;
+    private IAInfo iaInfo;
+
 
     public IA(String address, int port) {
         try {
@@ -29,6 +35,7 @@ public class IA {
             this.server     = new Socket(address, port);
             this.inStream   = server.getInputStream();
             this.outStream  = server.getOutputStream();
+            MAPPER.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
         } catch (IOException e) {
             LOG.error("Can't connect to COW server : {}", e.getMessage());
         }
@@ -39,14 +46,30 @@ public class IA {
             AuthenticateAbstractMessage auth = new AuthenticateAbstractMessage(name, avatarUrl);
             outStream.write((MAPPER.writeValueAsString(auth) + EOF).getBytes());
             outStream.flush();
-            connectId = MAPPER.readValue(inStream, AuthenticateResponse.class).getId();
-            LOG.info("Authenticate name : {} ", name);
-            LOG.info("Authenticate id   : {} ", connectId);
+            float id = MAPPER.readValue(inStream, AuthenticateResponse.class).getId();
+            iaInfo = new IAInfo(id, name, avatarUrl);
+            LOG.info("Authenticate : {} ", iaInfo);
         } catch (IOException e) {
             LOG.error("Can't authenticate : {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return this;
+    }
+
+    public void handleMessage(){
+        new Thread(() -> {
+                while(true) {
+                    try {
+                        TurnAction turnAction = MAPPER.readValue(server.getInputStream(), TurnAction.class);
+                        System.out.println(turnAction);
+                        TurnResult result = new TurnResult();
+                        result.setIa(iaInfo);
+                        result.setActions(Lists.newArrayList());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).run();
     }
 
     public void close() {
@@ -60,7 +83,4 @@ public class IA {
         }
     }
 
-    public long getConnectId() {
-        return connectId;
-    }
 }
