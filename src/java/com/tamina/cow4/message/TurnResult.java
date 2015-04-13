@@ -13,6 +13,11 @@ public class TurnResult extends Message {
         this.setType("turnResult");
     }
 
+    public TurnResult(IAInfo ia, List<TurnAction> actions) {
+        this.setType("turnResult");
+        this.ia = ia;
+        this.actions = actions;
+    }
 
     public IAInfo getIa() {
         return ia;
