@@ -40,10 +40,10 @@ public class IA {
             outStream.write((MAPPER.writeValueAsString(auth) + EOF).getBytes());
             outStream.flush();
             connectId = MAPPER.readValue(inStream, AuthenticateResponse.class).getId();
-            System.out.println("Connect with id : " + connectId);
-            LOG.info("Authenticate : with name : {} and id : {}", name, connectId);
+            LOG.info("Authenticate name : {} ", name);
+            LOG.info("Authenticate id   : {} ", connectId);
         } catch (IOException e) {
-            LOG.info("Can't authenticate : {}", e.getMessage());
+            LOG.error("Can't authenticate : {}", e.getMessage());
             throw new RuntimeException(e);
         }
         return this;
@@ -56,7 +56,7 @@ public class IA {
             this.server.close();
             LOG.info("Close server");
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            LOG.error("Error while closing the server : {}", e.getMessage());
         }
     }
 
