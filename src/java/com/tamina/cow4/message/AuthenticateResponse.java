@@ -2,7 +2,7 @@ package tamina.cow4.message;
 
 import com.google.common.base.MoreObjects;
 
-public class AuthenticateResponse extends AbstractMessage {
+public class AuthenticateResponse extends Message {
     private long id;
 
     public AuthenticateResponse() {

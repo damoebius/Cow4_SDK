@@ -1,6 +1,6 @@
 package tamina.cow4.message;
 
-public abstract class AbstractMessage {
+public class Message {
     private String type;
 
     public String getType() {
