@@ -10,7 +10,7 @@ import java.util.List;
 public class GameMapVO {
     private float id;
     private List<List<CellVO>> cells = Lists.newArrayList();
-    private List<IAInfo> iaInfos = Lists.newArrayList();
+    private List<IAInfo> iaList = Lists.newArrayList();
     private int currentTurn     = 0;
 
     public float getId() {
@@ -29,12 +29,12 @@ public class GameMapVO {
         this.cells = cells;
     }
 
-    public List<IAInfo> getIaInfos() {
-        return iaInfos;
+    public List<IAInfo> getIaList() {
+        return iaList;
     }
 
-    public void setIaInfos(List<IAInfo> iaInfos) {
-        this.iaInfos = iaInfos;
+    public void setIaList(List<IAInfo> iaList) {
+        this.iaList = iaList;
     }
 
     public int getCurrentTurn() {
